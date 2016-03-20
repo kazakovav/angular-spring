@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:context="http://www.springframework.org/schema/context"
+			 xmlns="http://www.springframework.org/schema/security"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<context:annotation-config/>
+
+	<!--<global-method-security pre-post-annotations="enabled" proxy-target-class="true"/>-->
+	<global-method-security secured-annotations="enabled"/>
+	<!--<global-method-security pre-post-annotations="enabled"/>-->
+	<!--<global-method-security secured-annotations="enabled" mode="aspectj" />-->
+
+	<http pattern="/resources/**" security="none"/>
+	<http pattern="/resources/js/**" security="none"/>
+	<http pattern="/welcome**" security="none"/>
+	<http pattern="/index**" security="none"/>
+	<http pattern="/pages/public/**" security="none"/>
+	<http pattern="/components/public/**" security="none"/>
+	<http pattern="/api/user/logout" security="none"/>
+
+	<http entry-point-ref="unauthorizedEntryPoint">
+		<http-basic/>
+		<intercept-url pattern="/api/*" access="hasRole('ROLE_USER')"/>
+		<intercept-url pattern="/pages/admin/**" access="hasRole('ROLE_ADMIN')"/>
+
+		<form-login login-processing-url="/api/authenticate"
+					username-parameter="username"
+					password-parameter="password"
+					authentication-failure-handler-ref="authenticationFailureHandler"
+					authentication-success-handler-ref="authenticationSuccessHandler"/>
+
+		<logout logout-url="/logout" success-handler-ref="logoutSuccessHandler"
+				delete-cookies="JSESSIONID,XSRF-TOKEN"/>
+
+
+		<access-denied-handler error-page="/403.html"/>
+		<session-management invalid-session-url="/" session-fixation-protection="newSession"/>
+		<csrf token-repository-ref="csrfTokenRepository"/>
+		<custom-filter after="CSRF_FILTER" ref="csrfHeaderFilter"/>
+	</http>
+
+	<beans:bean id="csrfHeaderFilter" class="org.akazakov.common.web.security.impl.CsrfHeaderFilter"/>
+
+	<beans:bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+		<beans:property name="headerName" value="X-XSRF-TOKEN"/>
+	</beans:bean>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailsServiceImpl">
+			<!--<password-encoder hash="md5"/> -->
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="userDetailsServiceImpl" class="org.akazakov.common.web.security.impl.UserDetailServiceImpl">
+		<beans:property name="userAuthenticationService" ref="userAuthenticationService"/>
+	</beans:bean>
+
+	<beans:bean id="unauthorizedEntryPoint"
+				class="org.akazakov.common.web.security.impl.Http401UnauthorizedEntryPoint"/>
+
+	<beans:bean id="authenticationSuccessHandler"
+				class="org.akazakov.common.web.security.impl.handlers.AjaxAuthenticationSuccessHandler"/>
+	<beans:bean id="authenticationFailureHandler"
+				class="org.akazakov.common.web.security.impl.handlers.AjaxAuthenticationFailureHandler"/>
+	<beans:bean id="logoutSuccessHandler"
+				class="org.akazakov.common.web.security.impl.handlers.AjaxLogoutSuccessHandler"/>
+
+</beans:beans>

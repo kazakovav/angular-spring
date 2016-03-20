@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sampleAngularApp">
+<head>
+	<meta charset="UTF-8">
+	<title translate="app.title">Angular Spring sample app</title>
+	<title>Sample angularjs spring app</title>
+	<link href="resources/css/lib/bootstrap.css" rel="stylesheet" type="text/css">
+	<link href="resources/css/lib/bootstrap-theme.css" rel="stylesheet" type="text/css">
+	<style type="text/css">
+		[ng\:cloak], [ng-cloak], .ng-cloak {
+			display: none !important;
+		}
+	</style>
+</head>
+<body>
+
+<header>
+	<nav class="navbar navbar-default">
+		<div class="container" ng-controller="NavigationController as navigation">
+			<div class="navbar-header">
+				<!--<a class="navbar-brand" href="#/" >{{'main.navbar.header' | translate}}</a>-->
+				<a class="navbar-brand" href="#/" translate="main.navbar.header">ANG SPRING</a>
+				<!--or use these instead-->
+				<!--<a class="navbar-brand" href="#/" translate>main.navbar.header</a>-->
+			</div>
+
+			<ul class="nav navbar-nav nav-pills">
+				<li ng-class="navigation.getClass('/')">
+					<a href="#/" translate="main.menu.home">Home</a>
+				</li>
+				<li ng-class="navigation.getClass('/login')" ng-show="!navigation.isAuthenticated()">
+					<a href="#/login" translate="main.menu.login">Login</a>
+				</li>
+				<li ng-class="navigation.getClass('/users')" ng-show="navigation.isUserHasRole('ROLE_ADMIN')">
+					<a href="#/users" translate="main.menu.users">Users</a>
+				</li>
+				<li role="presentation" class="dropdown" uib-dropdown>
+					<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+					   aria-expanded="false" uib-dropdown-toggle><span
+							translate="main.menu.language">Language </span><span
+							class="caret"></span> </a>
+					<ul class="dropdown-menu" uib-dropdown-menu>
+						<li ng-repeat="locale in navigation.locales"
+							ng-class="locale == navigation.currentLocale ? 'active' : ''">
+							<a href="" ng-click="navigation.setLocale(locale)">{{locale}}</a>
+						</li>
+					</ul>
+				</li>
+				<li ng-show="navigation.isAuthenticated()">
+					<a href="" ng-click="navigation.logout()" translate="main.menu.logout">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</header>
+
+<div class="col-sm-12">
+	<div ng-cloak class="ng-cloak">
+		<div ng-view class="container"></div>
+	</div>
+</div>
+
+<script src="resources/js/lib/angular.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-sanitize.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-resource.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-route.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-translate.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-translate-loader-url.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-translate-loader-static-files.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-translate-storage-local.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-translate-storage-cookie.js" type="text/javascript"></script>
+<script src="resources/js/lib/angular-cookies.js" type="text/javascript"></script>
+<script src="resources/js/lib/ui-bootstrap-tpls.js" type="text/javascript"></script>
+
+<script src="components/public/app.js" type="text/javascript"></script>
+<script src="components/public/login/login.service.js" type="text/javascript"></script>
+<script src="components/public/user/user.service.js" type="text/javascript"></script>
+<script src="components/public/user/user.controller.js" type="text/javascript"></script>
+<script src="components/public/login/login.controller.js" type="text/javascript"></script>
+<script src="components/public/home/home.controller.js" type="text/javascript"></script>
+
+</body>
+</html>

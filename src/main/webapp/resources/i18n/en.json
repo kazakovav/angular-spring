@@ -1,0 +1,16 @@
+{
+	"app.title": "Angular Spring sample app",
+	"main.navbar.header": "Angular Spring Example",
+	"main.menu.home": "Home page",
+	"main.menu.login": "Login",
+	"main.menu.language": "Language",
+	"main.menu.logout": "Logout",
+	"main.menu.users": "Users",
+	"home.info.greeting": "Greeting",
+	"home.user": "User:",
+	"home.role": "Role:",
+	"home.info.beforeLogin": "Login to see your greeting",
+	"login.username": "Username",
+	"login.password": "Password",
+	"login.submit": "Sign in"
+}

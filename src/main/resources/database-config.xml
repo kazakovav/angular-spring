@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx" xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<bean id="appDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${database.driverClassName}"/>
+		<property name="jdbcUrl" value="${database.url}"/>
+		<property name="user" value="${database.userName}"/>
+		<property name="password" value="${database.password}"/>
+		<property name="maxPoolSize" value="${database.maxPoolSize}"/>
+		<property name="maxStatements" value="${database.maxStatements}"/>
+		<property name="minPoolSize" value="${database.minPoolSize}"/>
+	</bean>
+
+	<bean id="appSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="appDataSource"/>
+		<property name="annotatedClasses">
+			<list>
+				<value>org.akazakov.angularspring.user.api.dto.User</value>
+				<value>org.akazakov.angularspring.user.api.dto.UserRoles</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${database.hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${database.hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
+			</props>
+		</property>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManager"/>
+
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="appSessionFactory"/>
+	</bean>
+
+	<bean id="abstractDao" class="org.akazakov.common.hibernate.HidernateDao" abstract="true">
+		<property name="sessionFactory" ref="appSessionFactory"/>
+	</bean>
+
+	<bean id="userDao" class="org.akazakov.angularspring.user.impl.UserDaoImpl" parent="abstractDao"/>
+
+	<bean class="org.akazakov.angularspring.utils.database.DatabasePopulator">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+
+
+</beans>

@@ -1,0 +1,73 @@
+group 'org.akazakov.angularspring'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+
+buildscript {
+	repositories { jcenter() }
+}
+
+sourceSets {
+	main { output.resourcesDir = "build/classes/main" }
+}
+
+repositories { mavenCentral() }
+
+def junitVersion = '4.11'
+def springSecurityVersion = '4.0.1.RELEASE'
+def springVersion = '4.1.6.RELEASE'
+def hibernateVerion = '4.0.1.Final'
+def hibernatePersistenceVersion = '1.0.1.Final'
+def c3p0Version = '0.9.1.2'
+def hsqldbVersion = '2.3.3'
+def log4jVersion = '2.0'
+def jacksonVersion = '1.9.13'
+def fasterXmlVersion = '2.2.2'
+
+dependencies {
+	testCompile group: 'junit', name: 'junit', version: junitVersion
+	testCompile group: 'org.springframework', name: 'spring-test', version: springVersion
+	//	log4j
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+	compile group: 'org.apache.logging.log4j', name: 'log4j-web', version: log4jVersion
+	//	spring
+	compile group: 'org.springframework', name: 'spring-beans', version: springVersion
+	compile group: 'org.springframework', name: 'spring-context', version: springVersion
+	compile group: 'org.springframework', name: 'spring-context-support', version: springVersion
+	compile group: 'org.springframework', name: 'spring-core', version: springVersion
+	compile group: 'org.springframework', name: 'spring-aop', version: springVersion
+	compile group: 'org.springframework', name: 'spring-aspects', version: springVersion
+	compile group: 'org.springframework', name: 'spring-expression', version: springVersion
+	compile group: 'org.springframework', name: 'spring-jdbc', version: springVersion
+	compile group: 'org.springframework', name: 'spring-orm', version: springVersion
+	compile group: 'org.springframework', name: 'spring-tx', version: springVersion
+	compile group: 'org.springframework', name: 'spring-web', version: springVersion
+	compile group: 'org.springframework', name: 'spring-webmvc', version: springVersion
+	//	spring security
+	compile group: 'org.springframework.security', name: 'spring-security-web', version: springSecurityVersion
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: springSecurityVersion
+	compile group: 'org.springframework.security', name: 'spring-security-config', version: springSecurityVersion
+	compile group: 'org.springframework.security', name: 'spring-security-taglibs', version: springSecurityVersion
+	compile group: 'org.springframework.security', name: 'spring-security-aspects', version: springSecurityVersion
+	//	Hibernate
+	compile group: 'org.hibernate.common', name: 'hibernate-commons-annotations', version: hibernateVerion
+	compile group: 'org.hibernate', name: 'hibernate-core', version: hibernateVerion
+	compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: hibernatePersistenceVersion
+	compile group: 'c3p0', name: 'c3p0', version: c3p0Version
+	//	HsqlDB Driver
+	compile group: 'org.hsqldb', name: 'hsqldb', version: hsqldbVersion
+	//	JSON Dependencies
+	compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: jacksonVersion
+	compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: jacksonVersion
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: fasterXmlVersion
+	// jsp taglibs
+	providedCompile group: 'taglibs', name: 'standard', version: '1.1.2'
+	providedCompile group: 'javax.servlet', name: 'jstl', version: '1.1.2'
+	providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+}

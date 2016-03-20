@@ -1,0 +1,16 @@
+{
+	"app.title": "Angular Spring тестовое приложение",
+	"main.navbar.header": "Angular Spring Пример",
+	"main.menu.home": "Домашняя страница",
+	"main.menu.login": "Войти",
+	"main.menu.language": "Язык",
+	"main.menu.logout": "Выход",
+	"main.menu.users": "Пользователи",
+	"home.info.greeting": "Приветствуем",
+	"home.user": "Пользователь:",
+	"home.role": "Роль пользователя:",
+	"home.info.beforeLogin": "Войдите, чтобы вас поприветствовали",
+	"login.username": "Имя пользователя",
+	"login.password": "Пароль",
+	"login.submit": "Войти"
+}
