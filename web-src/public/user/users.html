@@ -1,0 +1,13 @@
+<div ng-repeat="user in users.users" class="table-bordered">
+	<p>
+		<b translate="home.user"></b>
+		{{user.userName}}
+	</p>
+
+	<div ng-repeat="role in user.userRoles">
+		<p>
+			<b translate="home.role"></b>
+			{{role.role}}
+		</p>
+	</div>
+</div>

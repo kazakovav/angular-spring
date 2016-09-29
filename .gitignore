@@ -1,0 +1,7 @@
+/bin/
+.settings
+node_modules
+web-src/resources/js
+.project
+.classpath
+jsconfig.json

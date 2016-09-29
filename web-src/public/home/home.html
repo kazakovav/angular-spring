@@ -1,0 +1,19 @@
+<h1 translate="home.info.greeting">Greeting</h1>
+<div ng-show="home.isAuthenticated()">
+	<p>
+		<b translate="home.user"></b>
+		{{home.currentUser.userName}}
+	</p>
+
+	<div ng-repeat="role in home.currentUser.userRoles">
+		<p>
+			<b translate="home.role"></b>
+			{{role.role}}
+		</p>
+	</div>
+</div>
+<div ng-show="!home.isAuthenticated()">
+	<p translate="home.info.beforeLogin">
+		Login to see your greeting
+	</p>
+</div>

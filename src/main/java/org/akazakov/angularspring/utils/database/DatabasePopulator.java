@@ -1,5 +1,7 @@
 package org.akazakov.angularspring.utils.database;
 
+import java.util.HashSet;
+
 import org.akazakov.angularspring.security.api.UserRolesConst;
 import org.akazakov.angularspring.user.api.UserDao;
 import org.akazakov.angularspring.user.api.dto.User;
@@ -7,9 +9,6 @@ import org.akazakov.angularspring.user.api.dto.UserRoles;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Transactional
 public class DatabasePopulator implements ApplicationListener<ContextRefreshedEvent> {
@@ -22,7 +21,6 @@ public class DatabasePopulator implements ApplicationListener<ContextRefreshedEv
 	}
 
 	private void populateDatabase() {
-		List<User> users = userDao.getUserList();
 		if (userDao.getUserByUserName("admin") == null) {
 			User user = new User();
 			user.setUserName("admin");

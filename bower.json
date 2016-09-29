@@ -1,0 +1,20 @@
+{
+	"name": "angular-spring",
+	"version": "1.0.0",
+	"authors": [
+		"Andrey Kazakov <kazakov.andr.v@gmail.com>"
+	],
+	"description": "angularsj js libs",
+	"license": "MIT",
+	"dependencies": {
+		"angular": "1.5.8",
+		"angular-bootstrap": "1.1.2",
+		"angular-sanitize": "1.5.8",
+		"angular-translate": "2.10.0",
+		"angular-translate-loader-url": "2.10.0",
+		"angular-translate-loader-static-files": "2.10.0",
+		"angular-translate-storage-local": "2.10.0",
+		"angular-resource": "1.5.8",
+		"angular-route": "1.5.8"
+	}
+}

@@ -1,0 +1,25 @@
+{
+  "name": "angular-spring",
+  "version": "1.0.0",
+  "description": "AngularJS and SpringMVC sample application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazakovav/angular-spring.git"
+  },
+  "author": "Andrey Kazakov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kazakovav/angular-spring/issues"
+  },
+  "homepage": "https://github.com/kazakovav/angular-spring#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-bower": "0.0.13",
+    "gulp-concat": "^2.6.0",
+    "gulp-uglify": "^2.0.0"
+  }
+}

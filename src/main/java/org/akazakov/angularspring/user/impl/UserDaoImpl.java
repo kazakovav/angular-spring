@@ -33,9 +33,9 @@ public class UserDaoImpl extends HidernateDao implements UserDao {
 		session.save(user);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getUserList() {
-		;
 		List<User> userList = (List<User>) openSession().createCriteria(User.class).list();
 		return userList;
 	}
