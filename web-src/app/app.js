@@ -10,15 +10,15 @@
 	angular.module('sampleAngularApp').config(
 		function ($routeProvider, $httpProvider, userResourceProvider, loginServiceProvider, $translateProvider) {
 			$routeProvider.when('/', {
-				templateUrl: 'components/public/home/home.html',
+				templateUrl: 'home/home.html',
 				controller: 'HomeController',
 				controllerAs: 'home'
 			}).when('/login', {
-				templateUrl: 'components/public/login/login.html',
+				templateUrl: 'login/login.html',
 				controller: 'LoginController',
 				controllerAs: 'login'
 			}).when('/users', {
-				templateUrl: 'components/public/user/users.html',
+				templateUrl: 'user/users.html',
 				controller: 'UsersController',
 				controllerAs: 'users'
 			}).otherwise('/');
