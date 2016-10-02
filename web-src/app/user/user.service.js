@@ -46,15 +46,17 @@
 		var userCurrentUrl = 'api/users/current';
 		var userDefaultUrl = 'api/users';
 
-		this.setUserCurrentUrl = function (currentUrl) {
+		var that = this;
+
+		that.setUserCurrentUrl = function (currentUrl) {
 			userCurrentUrl = currentUrl;
 		};
 
-		this.setUserDefaultUrl = function (defaultUrl) {
+		that.setUserDefaultUrl = function (defaultUrl) {
 			userDefaultUrl = defaultUrl;
 		};
 
-		this.$get = ['$resource', function ($resource) {
+		that.$get = ['$resource', function ($resource) {
 			return $resource(userDefaultUrl + '/:id', {id: '@id'}, {
 				current: {
 					method: 'GET',

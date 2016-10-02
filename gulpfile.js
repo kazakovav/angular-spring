@@ -1,13 +1,23 @@
 var gulp = require('gulp');
-var bower = require('gulp-bower');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var inject = require('gulp-inject');
-var del = require('del');
-var mainBowerFiles = require('main-bower-files');
+var bower = require('gulp-bower'); // module for resolving module bower dependencies
+var concat = require('gulp-concat'); // module for concat files
+var uglify = require('gulp-uglify'); // module for minify js files
+var cssnano = require('gulp-cssnano'); // minify css files
+var inject = require('gulp-inject'); // inject css and js references into index.html
+var del = require('del'); // clean files
+var gulpif = require('gulp-if'); // need for different environment settings
+var mainBowerFiles = require('main-bower-files'); // get list of bower dependencies
+// Insert text of  angular template into 'template'' var
+// instead reference 'templateUrl' for directives and views
 var embedTemplates = require('gulp-angular-embed-templates');
 
+
+// load environment configuration, please use
+// 'gulp {task-name} --env dev' for development environment, settings are in file 'dev-config.js'
+// 'gulp {task-name} --env prod' for production environment, settings are in file 'prod-config.js'
 var globalConfig = require('./gulp-build-config');
+
+var taskOptions = globalConfig.getConfigKeys();
 
 
 // params
@@ -21,19 +31,14 @@ var src = {
 var dist = {
 	html: './src/main/webapp',
 	js: './src/main/webapp/resources/js',
+	jslibs: './src/main/webapp/resources/js/libs',
 	css: './src/main/webapp/resources/css',
 	fonts: './src/main/webapp/resources/fonts'
 };
 
-gulp.task('test-log', function () {
-	console.log('environment: ' + globalConfig.environment);
-	console.log(`base dir: ${dist.baseDir}`);
-	console.log(`concat is: ${globalConfig.getConfigKeys().concat}`)
-});
-
-// Clean src files
+// Clean dist files and directories
 gulp.task('clean', function () {
-    return del.sync([`${dist.html}/*.html`, `${dist.js}`, `${dist.css}`, `${dist.fonts}`]);
+    return del.sync([dist.html + '/*.html', dist.js, dist.css, dist.fonts]);
 });
 
 // Run bower for client dependencies resolving
@@ -41,36 +46,41 @@ gulp.task('bower', function () {
 	return bower();
 });
 
-// concat libs and minify it
-gulp.task('lib-prepare', ['bower'], function () {
+// concat js libs and minify it
+gulp.task('libjs-prepare', ['bower'], function () {
 	return gulp.src(mainBowerFiles())
 		.pipe(concat('libs.min.js'))
 		.pipe(uglify())
+		.pipe(gulp.dest(dist.jslibs));
+});
+
+// concat css libs and minify it
+gulp.task('libcss-prepare', function () {
+	return gulp.src(['./web-src/css/bootstrap.css', './web-src/css/bootstrap-theme.css'])
+		.pipe(concat('libs.min.css'))
+		.pipe(cssnano())
+		.pipe(gulp.dest(dist.css));
+});
+
+// copy html files to dist, but do not copy templates
+gulp.task('html-prepare', function () {
+	return gulp.src(src.html).pipe(gulp.dest(dist.html));
+});
+
+// concat and minify js src files
+gulp.task('js-prepare', function () {
+	return gulp.src(src.js)
+		.pipe(embedTemplates()) // embed angular templates into js files
+		.pipe(gulpif(taskOptions.concat, concat('app.js'))) // concat if there options
+		.pipe(gulpif(taskOptions.minify, uglify())) // minify if need
 		.pipe(gulp.dest(dist.js));
 });
 
 // insert scripts into html pages
-gulp.task('index', function () {
-	var target = gulp.src('./web-src/index.html');
-	// It's not necessary to read the files (will speed up things), we're only after their paths: 
-	var sources = gulp.src(['./web-src/**/*.js', './web-src/**/*.css'], { read: false });
-
-	return target.pipe(inject(sources, { relative: true })).pipe(gulp.dest('web-src'));
+gulp.task('html-update', ['libjs-prepare', 'libcss-prepare', 'html-prepare', 'js-prepare'], function () {
+	var target = gulp.src(dist.html + '/*.html');
+	var sources = gulp.src([dist.jslibs + '/**/*.js', dist.css + '**/*.css', dist.js + '/**/*.js'], { read: false });
+	return target.pipe(inject(sources, { relative: true })).pipe(gulp.dest(dist.html));
 });
 
-
-
-gulp.task('bower-copy', ['bower'], function () {
-    // mainBowerFiles is used as a src for the task,
-    // usually you pipe stuff through a task
-    return gulp.src(mainBowerFiles())
-        // Then pipe it to wanted directory, I use
-        // dist/lib but it could be anything really
-        .pipe(gulp.dest('./web-src/dist/lib'))
-});
-
-gulp.task('embed-template', function () {
-    gulp.src('./web-src/app/**/*.js')
-        .pipe(embedTemplates())
-        .pipe(gulp.dest('./dist/js'));
-});
+gulp.task('build', ['clean', 'html-update']);

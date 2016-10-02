@@ -8,6 +8,7 @@
 		'ngCookies', 'user.service', 'user.login', 'user.login.service', 'user.home', 'users.controller']);
 
 	angular.module('sampleAngularApp').config(
+		[ '$routeProvider', '$httpProvider', 'userResourceProvider', 'loginServiceProvider', '$translateProvider',
 		function ($routeProvider, $httpProvider, userResourceProvider, loginServiceProvider, $translateProvider) {
 			$routeProvider.when('/', {
 				templateUrl: 'home/home.html',
@@ -49,18 +50,18 @@
 			$translateProvider.useLocalStorage();
 
 			$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-		});
+		}]);
 
 	function NavigationController($route, $location, $translate, userService, loginService) {
-		this.locales = ['en', 'ru'];
-		this.currentLocale = $translate.use() || $translate.storage().get($translate.storageKey())
-			|| $translate.preferredLanguage();
+		var that = this;
+		that.locales = ['en', 'ru'];
+		that.currentLocale = $translate.use() || $translate.storage().get($translate.storageKey()) || $translate.preferredLanguage();
 
-		this.tab = function (route) {
+		that.tab = function (route) {
 			return $route.current && route === $route.current.controller;
 		};
 
-		this.getClass = function (path) {
+		that.getClass = function (path) {
 			if (path === '/') {
 				if ($location.path() === '/') {
 					return "active";
@@ -76,24 +77,24 @@
 			}
 		};
 
-		this.logout = function () {
+		that.logout = function () {
 			loginService.logoutUser(function () {
 				userService.reset();
 				$location.path("/");
 			});
 		};
 
-		this.isAuthenticated = function () {
+		that.isAuthenticated = function () {
 			return userService.isAuthenticated();
 		};
 
-		this.setLocale = function (locale) {
+		that.setLocale = function (locale) {
 			$translate.use(locale);
 			$translate.refresh();
-			this.currentLocale = locale;
+			that.currentLocale = locale;
 		};
 
-		this.isUserHasRole = function (role) {
+		that.isUserHasRole = function (role) {
 			return userService.isUserHasRole(role);
 		};
 	}
